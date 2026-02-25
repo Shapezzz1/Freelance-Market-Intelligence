@@ -1,0 +1,16 @@
+# Archivos temporales de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Bases de datos y archivos de reporte (se generan localmente)
+*.db
+*.csv
+
+# Entornos virtuales (si usas uno)
+venv/
+env/
+.venv/
+
+# Variables de entorno
+.env

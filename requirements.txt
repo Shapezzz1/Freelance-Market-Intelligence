@@ -1,0 +1,6 @@
+requests==2.31.0
+beautifulsoup4==4.12.3
+selenium==4.17.2
+webdriver-manager==4.0.1
+pandas==2.2.0
+schedule==1.2.1
