@@ -1,51 +1,43 @@
-# 🚀 Freelance Market Intelligence Pipeline
+# Inteligencia de Mercado Freelance (Data Pipeline)
 
-Un pipeline de datos (ETL) automatizado de extremo a extremo diseñado para extraer, limpiar y analizar ofertas de trabajo en plataformas freelance (SPA/Renderizado Dinámico). El objetivo de este proyecto es monitorear en tiempo real las tendencias del mercado, presupuestos y tecnologías más demandadas en el sector de los datos.
+## De qué trata este proyecto
+Básicamente, armé un pipeline de datos (ETL) automatizado de punta a punta para extraer, limpiar y analizar ofertas de trabajo reales en plataformas freelance. 
 
-## 🧠 Arquitectura del Proyecto
+El problema que resuelve es la falta de visibilidad rápida sobre lo que pide el mercado. En lugar de entrar a mirar ofertas a mano, este script monitorea en tiempo real las tendencias, los presupuestos y las tecnologías más demandadas en el sector de datos. Es una herramienta de inteligencia comercial construida enteramente con código.
 
-El sistema está construido bajo una arquitectura modular para asegurar escalabilidad y fácil mantenimiento:
+## Cómo funciona
 
-1. **Ingesta (Scraper):** Utiliza `Selenium` y `WebDriver` para sortear protecciones anti-bots y renderizar contenido dinámico en JavaScript, extrayendo el HTML crudo.
-2. **Transformación (Parser):** `BeautifulSoup4` procesa el DOM aplicando programación defensiva (`try-except`) para manejar etiquetas faltantes. Implementa filtros lógicos para descartar ofertas obsoletas (ej. > 1 mes de antigüedad).
-3. **Almacenamiento (Database):** Base de datos `SQLite3` transaccional (usando Context Managers). Implementa restricciones `UNIQUE` e `INSERT OR IGNORE` para evitar duplicados, junto con índices para optimizar futuras consultas.
-4. **Orquestación (Main):** Interfaz de Línea de Comandos (CLI) construida con `argparse` que permite parametrizar búsquedas, páginas e idiomas, además de integrar un *Scheduler* para ejecuciones en background.
-5. **Análisis (Analyze):** Integración directa entre SQL y `Pandas` para realizar análisis de frecuencia (NLP básico) sobre las habilidades requeridas.
+El sistema tiene una arquitectura modular para que sea escalable y fácil de mantener:
 
-## 🛠️ Stack Tecnológico
+1. Ingesta (Web Scraping): Las plataformas modernas bloquean los scrapers simples. Para solucionarlo, usé Selenium y WebDriver. Esto me permite sortear protecciones y renderizar el contenido dinámico en JavaScript para extraer el HTML real.
+2. Transformación (Parser): Con BeautifulSoup4 proceso el DOM. Le metí programación defensiva (try-except) para que el script no se rompa si faltan etiquetas, y filtros lógicos para descartar basura (por ejemplo, ofertas que tienen más de un mes de antigüedad).
+3. Almacenamiento (Base de Datos): Toda la info limpia va a una base SQLite3. Para mantener la integridad de los datos, armé restricciones lógicas (UNIQUE e INSERT OR IGNORE) que evitan guardar ofertas duplicadas, y sumé índices para que las consultas sean rápidas.
+4. Orquestación: Armé una interfaz de línea de comandos (CLI) con Argparse. Esto permite pasarle parámetros al script (qué buscar, cuántas páginas, qué idiomas) directamente desde la terminal, y lo dejé preparado para correr en background con un Scheduler.
+5. Análisis: Una vez que los datos están en la base, uso Pandas para conectarme mediante SQL, hacer un análisis de frecuencia sobre las habilidades requeridas y sacar métricas limpias.
 
-* **Lenguaje:** Python 3.x
-* **Extracción:** Selenium, BeautifulSoup4, Requests
-* **Base de Datos:** SQLite3 (SQL Crudo)
-* **Análisis de Datos:** Pandas
-* **Orquestación:** Argparse, Schedule
+## Stack Tecnológico
 
-## ⚙️ Instalación y Uso
+* Lenguaje: Python 3.x
+* Extracción (Scraping): Selenium, BeautifulSoup4, Requests
+* Base de Datos: SQLite3
+* Análisis de Datos: Pandas
+* Orquestación: Argparse, Schedule
 
-1. Clonar el repositorio:
-   ```bash
-   git clone [https://github.com/Shapezzz1/Freelance-Market-Intelligence.git](https://github.com/Shapezzz1/Freelance-Market-Intelligence.git)
+## Cómo levantar el proyecto localmente
+
+Si querés correr el pipeline en tu pc, seguí estos pasos:
+
+1. Cloná el repositorio:
+   git clone https://github.com/Shapezzz1/Freelance-Market-Intelligence.git
    cd Freelance-Market-Intelligence
-   ```
 
-2. Instalar dependencias:
-   ```bash
+2. Instalá las dependencias:
    pip install -r requirements.txt
-   ```
 
-3. Ejecutar el orquestador (CLI):
-   Puedes personalizar la búsqueda usando argumentos. Ejemplo para buscar ofertas de "Data Analysis" en 5 páginas abarcando español, inglés y portugués:
-   ```bash
+3. Ejecutá el orquestador (CLI):
+   Podés parametrizar la búsqueda. Por ejemplo, para buscar ofertas de "Data Analysis" en 5 páginas y en tres idiomas distintos (español, inglés y portugués):
    python main.py --query "data analysis" --pages 5 --langs "es,en,pt"
-   ```
 
-4. Generar el reporte de mercado:
-   ```bash
+4. Generá el reporte analítico:
    python analyze.py
-   ```
-   *Esto leerá la base de datos y mostrará en consola el Top 10 de habilidades más demandadas, exportando un archivo CSV limpio para su visualización en herramientas como Power BI.*
-
-## 📈 Próximos Pasos (Roadmap)
-- [ ] Conectar el archivo CSV/SQLite directamente a un dashboard de Power BI.
-- [ ] Migrar de SQLite a PostgreSQL usando SQLAlchemy para despliegue en la nube.
-- [ ] Implementar rotación de User-Agents y Proxies para mayor resiliencia.
+   (Esto lee la base de datos, te muestra en consola el Top 10 de habilidades más demandadas y te escupe un CSV limpio listo para meter en Power BI).
